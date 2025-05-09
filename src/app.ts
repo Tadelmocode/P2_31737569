@@ -16,7 +16,7 @@ app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 app.use('/', mainRouter);
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
-app.listen(PORT, () => {
+app.listen(PORT, () =>{
   console.log(`Server running on http://localhost:${PORT}`);
   console.log(`Static files from: ${publicDir}`);
 });
