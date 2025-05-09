@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Pago</title>
+  <link rel="stylesheet" href="/css/payment.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src='/js/alertConfig.js'></script>
+  <style>
+    /* Estilos para iconos de tarjetas */
+    .card-brand-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      opacity: 0.7;
+    }
+    .fa-cc-visa { color: #1a1f71; }
+    .fa-cc-mastercard { color: #eb001b; }
+    .fa-cc-amex { color: #016fd0; }
+    .fa-cc-discover { color: #ff6000; }
+  </style>
+</head>
+<body>
+  <div class="payment-wrapper">
+    <div class="payment-container">
+      <div class="payment-header">
+        <div class="payment-icon">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <h1 class="payment-title">Registro de Pago</h1>
+        <p class="payment-subtitle">Complete los detalles de su método de pago</p>
+      </div>
+      
+      <form id='formularioPayment' class="payment-form">
+        <div class="form-section">
+          <h3 class="section-title"><i class="fas fa-user-circle"></i> Información Personal</h3>
+          <div class="form-group">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <div class="input-wrapper">
+              <input type="email" id="correo" name="correo" class="form-input" placeholder="ejemplo@dominio.com" required>
+              <i class="fas fa-envelope input-icon"></i>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="cardholder" class="form-label">Nombre del Titular</label>
+            <div class="input-wrapper">
+              <input type="text" id="nombreTitular" name="nombreTitular" class="form-input" placeholder="Como aparece en la tarjeta" required>
+              <i class="fas fa-user input-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title"><i class="fas fa-credit-card"></i> Datos de la Tarjeta</h3>
+          <div class="form-group">
+            <label for="cardnumber" class="form-label">Número de Tarjeta</label>
+            <div class="input-wrapper card-number-wrapper">
+              <input type="text" id="cardNumber" name="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" pattern="[0-9\s]{13,19}" required>
+              <i class="fas fa-credit-card input-icon"></i>
+              <div id="cardBrandIcon" class="card-brand-icon"></div>
+            </div>
+          </div>
+          
+          <div class="card-details">
+            <div class="form-group">
+              <label class="form-label">Fecha de Expiración</label>
+              <div class="expiration-group">
+                <div class="select-wrapper">
+                  <select id="expMonth" name="expMonth" class="form-input" required>
+                    <option value="" disabled selected>Mes</option>
+                    <% for(let i = 1; i <= 12; i++) { %>
+                      <option value="<%= i < 10 ? '0' + i : i %>"><%= i < 10 ? '0' + i : i %></option>
+                    <% } %>
+                  </select>
+                  <i class="fas fa-chevron-down select-arrow"></i>
+                </div>
+                <div class="select-wrapper">
+                  <select id="expYear" name="expYear" class="form-input" required>
+                    <option value="" disabled selected>Año</option>
+                    <% const currentYear = new Date().getFullYear(); %>
+                    <% for(let i = 0; i < 10; i++) { %>
+                      <option value="<%= currentYear + i %>"><%= currentYear + i %></option>
+                    <% } %>
+                  </select>
+                  <i class="fas fa-chevron-down select-arrow"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="cvv" class="form-label">Código CVV</label>
+              <div class="input-wrapper">
+                <input type="text" id="cvv" name="cvv" class="form-input" placeholder="123" pattern="[0-9]{3,4}" required>
+                <i class="fas fa-lock input-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Monto del Pago</h3>
+          <div class="form-group">
+            <div class="amount-group">
+              <div class="select-wrapper currency-select-wrapper">
+                <select id="currency" name="currency" class="form-input" required>
+                  <option value="USD">USD $</option>
+                  <option value="EUR">EUR €</option>
+                  <option value="GBP">GBP £</option>
+                  <option value="JPY">JPY ¥</option>
+                </select>
+                <i class="fas fa-chevron-down select-arrow"></i>
+              </div>
+              <div class="input-wrapper amount-input-wrapper">
+                <input type="number" id="amount" name="amount" class="form-input" placeholder="0.00" min="0" step="0.01" required>
+                <span class="currency-symbol">$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="submit-btn">
+        Realizar Pago Seguro
+        </button>
+        
+      </form>
+    </div>
+  </div>
+  <script src='/js/fetch2.js'></script>
+  <script>
+    // Detección automática del tipo de tarjeta
+    document.getElementById('cardNumber').addEventListener('input', function(e) {
+      const cardNumber = e.target.value;
+      const cardIcon = document.getElementById('cardBrandIcon');
+      
+      // Limpiar icono
+      cardIcon.className = 'card-brand-icon';
+      
+      // Detectar tipo de tarjeta
+      if (/^4/.test(cardNumber)) {
+        cardIcon.classList.add('fab', 'fa-cc-visa');
+      } else if (/^5[1-5]/.test(cardNumber)) {
+        cardIcon.classList.add('fab', 'fa-cc-mastercard');
+      } else if (/^3[47]/.test(cardNumber)) {
+        cardIcon.classList.add('fab', 'fa-cc-amex');
+      } else if (/^6(?:011|5)/.test(cardNumber)) {
+        cardIcon.classList.add('fab', 'fa-cc-discover');
+      } else if (cardNumber.length > 0) {
+        cardIcon.classList.add('fas', 'fa-credit-card');
+      }
+    });
+  </script>
+</body>
+</html>

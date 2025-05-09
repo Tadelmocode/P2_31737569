@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros de Pagos</title>
+    <link rel="stylesheet" href="/css/table.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="contacts-container">
+        <div class="contacts-header">
+            <h1 class="contacts-title">Registros de Pagos <i class="fas fa-credit-card"></i></h1>
+            <div class="contacts-count">
+                <span class="count-number"><%= datePayments.length %></span>
+                <span class="count-label">Transacciones</span>
+            </div>
+        </div>
+
+        <% if (datePayments.length > 0) { %>
+            <div class="table-responsive">
+                <table class="contacts-table">
+                    <thead>
+                        <tr>
+                            <th class="name-col">Titular</th>
+                            <th class="email-col">Correo</th>
+                            <th class="card-col">Tarjeta</th>
+                            <th class="expiry-col">Expiración</th>
+                            <th class="amount-col">Monto</th>
+                            <th class="date-col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% datePayments.forEach(payment => { %>
+                            <tr class="contact-row">
+                                <td data-label="Titular" class="contact-name">
+                                    <div class="name-avatar">
+                                        <%= payment.nombreTitular.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <%= payment.nombreTitular %>
+                                </td>
+                                <td data-label="Correo" class="contact-email">
+                                    <a href="mailto:<%= payment.correo %>"><%= payment.correo %></a>
+                                </td>
+                                <td data-label="Tarjeta">
+                                    <div class="payment-card">
+                                        <div class="card-avatar">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="card-details">
+                                            <span class="card-number">•••• •••• •••• <%= payment.cardNumber.slice(-4) %></span>
+                                            <span class="card-type">
+                                                <% if (['4'].includes(payment.cardNumber.charAt(0))) { %>
+                                                    <i class="fab fa-cc-visa"></i> Visa
+                                                <% } else if (['5'].includes(payment.cardNumber.charAt(0))) { %>
+                                                    <i class="fab fa-cc-mastercard"></i> Mastercard
+                                                <% } else if (['3'].includes(payment.cardNumber.charAt(0))) { %>
+                                                    <i class="fab fa-cc-amex"></i> Amex
+                                                <% } else { %>
+                                                    <i class="fas fa-credit-card"></i> Otra
+                                                <% } %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Expiración">
+                                    <span class="card-expiry">
+                                        <%= payment.expMonth %>/<%= payment.expYear.toString().slice(-2) %>
+                                    </span>
+                                </td>
+                                <td data-label="Monto">
+                                    <div class="payment-amount">
+                                        <%= payment.amount %>
+                                    </div>
+                                    <div class="payment-currency">
+                                        <% if (payment.currency === 'USD') { %>
+                                            USD
+                                        <% } else if (payment.currency === 'EUR') { %>
+                                            EUR
+                                        <% } else if (payment.currency === 'GBP') { %>
+                                            GBP
+                                        <% } else { %>
+                                            <%= payment.currency %>
+                                        <% } %>
+                                    </div>
+                                </td>
+                                <td data-label="Fecha" class="contact-date">
+                                    <div class="date-day"><%= new Date(payment.createdAt).toLocaleDateString() %></div>
+                                    <div class="date-time"><%= new Date(payment.createdAt).toLocaleTimeString() %></div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="no-contacts">
+                <img src="/img/no-data.svg" alt="No hay datos" class="no-contacts-img">
+                <p class="no-contacts-text">No hay registros de pagos disponibles</p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

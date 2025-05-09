@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros de Contactos</title>
+    <link rel="stylesheet" href="/css/table.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="contacts-container">
+        <div class="contacts-header">
+            <h1 class="contacts-title">Registros de Contacto</h1>
+            <div class="contacts-count">
+                <span class="count-number"><%= contacts.length %></span>
+                <span class="count-label">Registros</span>
+            </div>
+        </div>
+
+        <% if (contacts.length > 0) { %>
+            <div class="table-responsive">
+                <table class="contacts-table">
+                    <thead>
+                        <tr>
+                            <th class="name-col">Nombre</th>
+                            <th class="email-col">Email</th>
+                            <th class="comment-col">Comentario</th>
+                            <th class="ip-col">IP</th>
+                            <th class="date-col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% contacts.forEach(contact => { %>
+                            <tr class="contact-row">
+                                <td data-label="Nombre" class="contact-name">
+                                    <div class="name-avatar">
+                                        <%= contact.nombre.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <%= contact.nombre %>
+                                </td>
+                                <td data-label="Email" class="contact-email">
+                                    <a href="mailto:<%= contact.email %>"><%= contact.email %></a>
+                                </td>
+                                <td data-label="Comentario" class="contact-comment">
+                                    <%= contact.comentario.substring(0, 50) %><%= contact.comentario.length > 50 ? '...' : '' %>
+                                </td>
+                                <td data-label="IP" class="contact-ip">
+                                    <%= contact.ip %>
+                                </td>
+                                <td data-label="Fecha" class="contact-date">
+                                    <div class="date-day"><%= new Date(contact.createdAt).toLocaleDateString() %></div>
+                                    <div class="date-time"><%= new Date(contact.createdAt).toLocaleTimeString() %></div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="no-contacts">
+                <img src="/img/no-data.svg" alt="No hay datos" class="no-contacts-img">
+                <p class="no-contacts-text">No hay registros de contactos disponibles</p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
