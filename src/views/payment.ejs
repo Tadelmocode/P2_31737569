@@ -57,13 +57,24 @@
 
         <div class="form-section">
           <h3 class="section-title"><i class="fas fa-credit-card"></i> Datos de la Tarjeta</h3>
+
           <div class="form-group">
-            <label for="cardnumber" class="form-label">Número de Tarjeta</label>
-            <div class="input-wrapper card-number-wrapper">
-              <input type="text" id="cardNumber" name="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" pattern="[0-9\s]{13,19}" required>
-              <i class="fas fa-credit-card input-icon"></i>
-              <div id="cardBrandIcon" class="card-brand-icon"></div>
-            </div>
+            <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+            
+            <select name="cardNumber" id="cardNumber" class="form-input" required>
+              <option value="0">Seleccione un numero de cuenta</option>
+              <option value="5555555555554444">5555555555554444</option>
+              <option value="378282246310005">378282246310005</option>
+              <option value="6011111111111117">6011111111111117</option>
+              <option value="30569309025904">30569309025904</option>
+              <option value="4111111111111111">4111111111111111</option>
+              <option value="3530111333300000">3530111333300000</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <input type="text" id="descripcion" name="descripcion" class="form-input" placeholder="Ingresa Descripcion" required>
           </div>
           
           <div class="card-details">
@@ -75,84 +86,84 @@
                     <option value="" disabled selected>Mes</option>
                     <% for(let i = 1; i <= 12; i++) { %>
                       <option value="<%= i < 10 ? '0' + i : i %>"><%= i < 10 ? '0' + i : i %></option>
-                    <% } %>
-                  </select>
-                  <i class="fas fa-chevron-down select-arrow"></i>
-                </div>
-                <div class="select-wrapper">
-                  <select id="expYear" name="expYear" class="form-input" required>
-                    <option value="" disabled selected>Año</option>
-                    <% const currentYear = new Date().getFullYear(); %>
-                    <% for(let i = 0; i < 10; i++) { %>
+                      <% } %>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                  </div>
+                  <div class="select-wrapper">
+                    <select id="expYear" name="expYear" class="form-input" required>
+                      <option value="" disabled selected>Año</option>
+                      <% const currentYear = new Date().getFullYear(); %>
+                      <% for(let i = 0; i < 10; i++) { %>
                       <option value="<%= currentYear + i %>"><%= currentYear + i %></option>
-                    <% } %>
-                  </select>
-                  <i class="fas fa-chevron-down select-arrow"></i>
+                      <% } %>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="cvv" class="form-label">Código CVV</label>
+                <div class="input-wrapper">
+                  <input type="text" id="cvv" name="cvv" class="form-input" placeholder="123" pattern="[0-9]{3,4}" required>
+                  <i class="fas fa-lock input-icon"></i>
                 </div>
               </div>
             </div>
-            
-            <div class="form-group">
-              <label for="cvv" class="form-label">Código CVV</label>
-              <div class="input-wrapper">
-                <input type="text" id="cvv" name="cvv" class="form-input" placeholder="123" pattern="[0-9]{3,4}" required>
-                <i class="fas fa-lock input-icon"></i>
-              </div>
-            </div>
           </div>
-        </div>
 
-        <div class="form-section">
-          <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Monto del Pago</h3>
-          <div class="form-group">
-            <div class="amount-group">
-              <div class="select-wrapper currency-select-wrapper">
-                <select id="currency" name="currency" class="form-input" required>
-                  <option value="USD">USD $</option>
-                  <option value="EUR">EUR €</option>
-                  <option value="GBP">GBP £</option>
-                  <option value="JPY">JPY ¥</option>
-                </select>
-                <i class="fas fa-chevron-down select-arrow"></i>
-              </div>
-              <div class="input-wrapper amount-input-wrapper">
-                <input type="number" id="amount" name="amount" class="form-input" placeholder="0.00" min="0" step="0.01" required>
-                <span class="currency-symbol">$</span>
+          <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Monto del Pago</h3>
+            <div class="form-group">
+              <div class="amount-group">
+                <div class="select-wrapper currency-select-wrapper">
+                  <select id="currency" name="currency" class="form-input" required>
+                    <option value="USD">USD $</option>
+                    <option value="EUR">EUR €</option>
+                    <option value="GBP">GBP £</option>
+                    <option value="JPY">JPY ¥</option>
+                  </select>
+                  <i class="fas fa-chevron-down select-arrow"></i>
+                </div>
+                <div class="input-wrapper amount-input-wrapper">
+                  <input type="number" id="amount" name="amount" class="form-input" placeholder="0.00" min="0" step="0.01" required>
+                  <span class="currency-symbol">$</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <button type="submit" class="submit-btn">
-        Realizar Pago Seguro
-        </button>
-        
-      </form>
+          
+          <button type="submit" class="submit-btn">
+            Realizar Pago Seguro
+          </button>
+          
+        </form>
+      </div>
     </div>
-  </div>
-  <script src='/js/fetch2.js'></script>
-  <script>
+    <script src='/js/fetch2.js'></script>
+    <script>
     // Detección automática del tipo de tarjeta
-    document.getElementById('cardNumber').addEventListener('input', function(e) {
-      const cardNumber = e.target.value;
-      const cardIcon = document.getElementById('cardBrandIcon');
-      
+      document.getElementById('cardNumber').addEventListener('input', function(e) {
+        const cardNumber = e.target.value;
+        const cardIcon = document.getElementById('cardBrandIcon');
+        
       // Limpiar icono
-      cardIcon.className = 'card-brand-icon';
-      
+        cardIcon.className = 'card-brand-icon';
+        
       // Detectar tipo de tarjeta
-      if (/^4/.test(cardNumber)) {
-        cardIcon.classList.add('fab', 'fa-cc-visa');
-      } else if (/^5[1-5]/.test(cardNumber)) {
-        cardIcon.classList.add('fab', 'fa-cc-mastercard');
-      } else if (/^3[47]/.test(cardNumber)) {
-        cardIcon.classList.add('fab', 'fa-cc-amex');
-      } else if (/^6(?:011|5)/.test(cardNumber)) {
-        cardIcon.classList.add('fab', 'fa-cc-discover');
-      } else if (cardNumber.length > 0) {
-        cardIcon.classList.add('fas', 'fa-credit-card');
-      }
-    });
-  </script>
-</body>
-</html>
+        if (/^4/.test(cardNumber)) {
+          cardIcon.classList.add('fab', 'fa-cc-visa');
+        } else if (/^5[1-5]/.test(cardNumber)) {
+          cardIcon.classList.add('fab', 'fa-cc-mastercard');
+        } else if (/^3[47]/.test(cardNumber)) {
+          cardIcon.classList.add('fab', 'fa-cc-amex');
+        } else if (/^6(?:011|5)/.test(cardNumber)) {
+          cardIcon.classList.add('fab', 'fa-cc-discover');
+        } else if (cardNumber.length > 0) {
+          cardIcon.classList.add('fas', 'fa-credit-card');
+        }
+      });
+    </script>
+  </body>
+  </html>

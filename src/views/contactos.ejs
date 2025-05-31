@@ -25,6 +25,7 @@
                             <th class="name-col">Nombre</th>
                             <th class="email-col">Email</th>
                             <th class="comment-col">Comentario</th>
+                            <th class="country-col">Pais</th>
                             <th class="ip-col">IP</th>
                             <th class="date-col">Fecha</th>
                         </tr>
@@ -43,6 +44,9 @@
                                 </td>
                                 <td data-label="Comentario" class="contact-comment">
                                     <%= contact.comentario.substring(0, 50) %><%= contact.comentario.length > 50 ? '...' : '' %>
+                                </td>
+                                <td data-label="pais" class="contact-email">
+                                   <%=contact.pais%> 
                                 </td>
                                 <td data-label="IP" class="contact-ip">
                                     <%= contact.ip %>
