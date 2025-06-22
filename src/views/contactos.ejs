@@ -4,64 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registros de Contactos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/table.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="contacts-container">
-        <div class="contacts-header">
-            <h1 class="contacts-title">Registros de Contacto</h1>
-            <div class="contacts-count">
-                <span class="count-number"><%= contacts.length %></span>
-                <span class="count-label">Registros</span>
-            </div>
+    <%- include('partials/nav') %>
+     
+    <div class="payments-container">
+        <div class="payments-header">
+            <h1 class="payments-title">
+                <i class="fas fa-users"></i> Registros de Contactos
+            </h1>
+            <div class="payments-count">Total: <%= contacts.length %></div>
         </div>
+         
+        <!-- 🔍 Buscador -->
+        <form id="filterForm" class="mb-4">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o correo..." class="search-input" />
+        </form>
 
-        <% if (contacts.length > 0) { %>
-            <div class="table-responsive">
-                <table class="contacts-table">
-                    <thead>
-                        <tr>
-                            <th class="name-col">Nombre</th>
-                            <th class="email-col">Email</th>
-                            <th class="comment-col">Comentario</th>
-                            <th class="ip-col">IP</th>
-                            <th class="date-col">Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% contacts.forEach(contact => { %>
-                            <tr class="contact-row">
-                                <td data-label="Nombre" class="contact-name">
-                                    <div class="name-avatar">
-                                        <%= contact.nombre.charAt(0).toUpperCase() %>
-                                    </div>
-                                    <%= contact.nombre %>
-                                </td>
-                                <td data-label="Email" class="contact-email">
-                                    <a href="mailto:<%= contact.email %>"><%= contact.email %></a>
-                                </td>
-                                <td data-label="Comentario" class="contact-comment">
-                                    <%= contact.comentario.substring(0, 50) %><%= contact.comentario.length > 50 ? '...' : '' %>
-                                </td>
-                                <td data-label="IP" class="contact-ip">
-                                    <%= contact.ip %>
-                                </td>
-                                <td data-label="Fecha" class="contact-date">
-                                    <div class="date-day"><%= new Date(contact.createdAt).toLocaleDateString() %></div>
-                                    <div class="date-time"><%= new Date(contact.createdAt).toLocaleTimeString() %></div>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
+        <!-- Contenedor dinámico de contactos -->
+        <div id="contactsContainer">
+            <% if (contacts.length > 0) { %>
+            <div class="payments-grid">
+                <% contacts.forEach((contact, index) => { %>
+                <div class="payment-card" style="animation-delay: <%= index * 0.1 %>s">
+                    <div class="payment-card-header">
+                        <h3 class="payment-card-title"><%= contact.nombre %></h3>
+                        <span class="payment-card-type">
+                            <i class="fas fa-user-tag"></i> Contacto
+                        </span>
+                    </div>
+
+                    <div class="payment-card-body">
+                        <div class="payment-detail">
+                            <span class="payment-detail-label">Correo:</span>
+                            <span class="payment-detail-value contact-email"><%= contact.email %></span>
+                        </div>
+                        <div class="payment-detail">
+                            <span class="payment-detail-label">Comentario:</span>
+                            <span class="payment-detail-value"><%= contact.comentario %></span>
+                        </div>
+                        <div class="payment-detail">
+                            <span class="payment-detail-label">Pais:</span>
+                            <span class="payment-detail-value"><%= contact.pais %></span>
+                        </div>
+                        <div class="payment-detail">
+                            <span class="payment-detail-label">IP:</span>
+                            <span class="payment-detail-value contact-ip"><%= contact.ip %></span>
+                        </div>
+                    </div>
+
+                    <div class="payment-card-footer">
+                        <div class="payment-date">
+                            <i class="far fa-calendar-alt"></i>
+                            <%= new Date(contact.createdAt).toLocaleDateString() %>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <%= new Date(contact.createdAt).toLocaleTimeString() %>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
             </div>
-        <% } else { %>
-            <div class="no-contacts">
-                <img src="/img/no-data.svg" alt="No hay datos" class="no-contacts-img">
-                <p class="no-contacts-text">No hay registros de contactos disponibles</p>
+            <% } else { %>
+            <div class="no-payments">
+                <i class="fas fa-inbox"></i>
+                <p>No hay registros de contactos disponibles</p>
             </div>
-        <% } %>
+            <% } %>
+        </div>
     </div>
+
+    <%- include('partials/footer') %>
+    <script src="/js/filter.js"></script>
 </body>
 </html>
