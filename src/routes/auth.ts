@@ -3,7 +3,7 @@ import passport from '@config/passport.js';
 
 const router = express.Router();
 
-// Inicia login con Google
+//Inicia login con Google
 router.get('/auth/google',
   passport.authenticate('google',{scope:['profile', 'email']})
 );
