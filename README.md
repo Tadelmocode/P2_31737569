@@ -1,202 +1,105 @@
-📧 Integración de Nodemailer, fakePayment API, Google Analytics y reCAPTCHA v2 en Express con TypeScript
-📌 Tabla de Contenidos
-Configuración de Nodemailer
+📬 Configuración del Servicio de Correos
+Implementación con Nodemailer para envíos masivos
 
-Integración de fakePayment API
-
-Google Analytics
-
-Google reCAPTCHA v2
-
-Variables de Entorno
-
-Estructura de Archivos
-
-📧 Nodemailer
-Configuración para envío de correos a múltiples destinatarios
 typescript
-// src/utils/nodemailer.ts
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+// src/lib/emailSender.ts  
+import { createTransport } from 'nodemailer';  
+import { env } from 'process';  
 
-dotenv.config();
+const mailer = createTransport({  
+  host: 'smtp.gmail.com',  
+  auth: {  
+    user: env.MAIL_ACCOUNT,  
+    pass: env.MAIL_APP_KEY  
+  }  
+});  
 
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
+export async function dispatchEmail(  
+  emails: string[],  
+  title: string,  
+  body: string  
+) {  
+  const options = {  
+    sender: env.MAIL_ACCOUNT,  
+    recipients: emails.join(', '),  
+    subject: title,  
+    html: body  
+  };  
 
-export const sendEmail = async (
-  recipients: string[],
-  subject: string,
-  htmlContent: string
-) => {
-  try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: recipients.join(', '),
-      subject,
-      html: htmlContent
-    });
-    return { success: true, messageId: info.messageId };
-  } catch (error) {
-    console.error('Error sending email:', error);
-    return { success: false, error };
-  }
-};
-Uso en controladores
+  try {  
+    const result = await mailer.sendMail(options);  
+    return { ok: true, id: result.messageId };  
+  } catch (err) {  
+    console.log('Falló el envío:', err);  
+    return { ok: false, error: err };  
+  }  
+}  
+💸 Conexión con Pasarela de Pagos
+Servicio para transacciones simuladas
+
 typescript
-// Ejemplo de envío a múltiples destinatarios
-await sendEmail(
-  ['destinatario1@example.com', 'destinatario2@example.com'],
-  'Asunto importante',
-  '<p>Contenido HTML del correo</p>'
-);
-💳 fakePayment API
-Configuración para procesar pagos
+// src/api/paymentGateway.ts  
+import { post } from 'axios';  
+
+type PaymentDetails = {  
+  total: string;  
+  card: string;  
+  securityCode: string;  
+  expiry: { month: string; year: string };  
+  name: string;  
+  type: string;  
+  details: string;  
+};  
+
+export async function executePayment(data: PaymentDetails) {  
+  const payload = {  
+    ...data,  
+    transactionId: `txn_${Date.now()}`  
+  };  
+
+  const config = {  
+    headers: {  
+      Authorization: `Bearer ${env.PAYMENT_API_TOKEN}`,  
+      'Content-Type': 'application/json'  
+    }  
+  };  
+
+  try {  
+    const response = await post(  
+      'https://fakepayment.onrender.com/payments',  
+      payload,  
+      config  
+    );  
+    return response.data;  
+  } catch (err) {  
+    throw new Error('Error en transacción');  
+  }  
+}  
+🛡️ Validación de reCAPTCHA
+Middleware para protección de formularios
+
 typescript
-// src/services/paymentService.ts
-import axios from 'axios';
+// src/security/recaptchaValidator.ts  
+export async function validateCaptcha(token: string) {  
+  const url = 'https://www.google.com/recaptcha/api/siteverify';  
+  const params = new URLSearchParams({  
+    secret: env.CAPTCHA_PRIVATE_KEY,  
+    response: token  
+  });  
 
-export const processPayment = async (paymentData: {
-  amount: string;
-  cardNumber: string;
-  cvv: string;
-  expMonth: string;
-  expYear: string;
-  fullName: string;
-  currency: string;
-  description: string;
-}) => {
-  try {
-    const response = await axios.post(
-      'https://fakepayment.onrender.com/payments',
-      {
-        ...paymentData,
-        reference: `ref-${Date.now()}`
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.FAKEPAYMENT_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Payment error:', error.response?.data || error.message);
-    throw error;
-  }
-};
-Ejemplo de endpoint
-typescript
-// src/routes/paymentRoutes.ts
-import express from 'express';
-import { processPayment } from '../services/paymentService';
+  const { data } = await axios.post(url, params.toString(), {  
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }  
+  });  
 
-const router = express.Router();
+  return data.success;  
+}  
+📊 Monitoreo con Google Analytics
+Seguimiento de eventos en frontend
 
-router.post('/process-payment', async (req, res) => {
-  try {
-    const result = await processPayment(req.body);
-    res.json({ success: true, data: result });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error processing payment' 
-    });
-  }
-});
-
-export default router;
-📊 Google Analytics
-Integración en vistas EJS
 html
-<!-- views/layout.ejs -->
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TU_ID_DE_ANALYTICS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TU_ID_DE_ANALYTICS');
-  </script>
-</head>
-Seguimiento de eventos
-javascript
-gtag('event', 'purchase', {
-  transaction_id: 'T12345',
-  value: 100.0,
-  currency: 'USD',
-  items: [{
-    item_name: 'Producto',
-    item_id: 'P123',
-    price: 100.0,
-    quantity: 1
-  }]
-});
-🔒 Google reCAPTCHA v2
-Configuración en backend
-typescript
-// src/middlewares/recaptchaMiddleware.ts
-import axios from 'axios';
-
-export const verifyRecaptcha = async (token: string): Promise<boolean> => {
-  try {
-    const response = await axios.post(
-      'https://www.google.com/recaptcha/api/siteverify',
-      null,
-      {
-        params: {
-          secret: process.env.RECAPTCHA_SECRET_KEY,
-          response: token
-        }
-      }
-    );
-    return response.data.success;
-  } catch (error) {
-    console.error('reCAPTCHA verification failed:', error);
-    return false;
-  }
-};
-Uso en formularios
-html
-<!-- Vista EJS -->
-<form id="contact-form">
-  <!-- Campos del formulario -->
-  <div class="g-recaptcha" data-sitekey="<%= process.env.RECAPTCHA_SITE_KEY %>"></div>
-  <button type="submit">Enviar</button>
-</form>
-
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-Validación en el controlador
-typescript
-router.post('/contact', async (req, res) => {
-  const { 'g-recaptcha-response': token } = req.body;
-  
-  if (!(await verifyRecaptcha(token))) {
-    return res.status(400).json({ error: 'reCAPTCHA verification failed' });
-  }
-  
-  // Procesar formulario...
-});
-🔑 Variables de Entorno
-env
-# .env
-# Nodemailer
-EMAIL_USER=tu_correo@gmail.com
-EMAIL_PASSWORD=tu_contraseña_o_app_password
-
-# fakePayment API
-FAKEPAYMENT_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-# Google Analytics
-GA_TRACKING_ID=G-XXXXXXX
-
-# reCAPTCHA
-RECAPTCHA_SITE_KEY=6Le...
-RECAPTCHA_SECRET_KEY=6Le...
+<!-- Incluir en <head> -->  
+<script>  
+  window.dataLayer = window.dataLayer || [];  
+  function trackEvent() { dataLayer.push(arguments); }  
+  trackEvent('config', env.GA_MEASUREMENT_ID);  
+</script>  

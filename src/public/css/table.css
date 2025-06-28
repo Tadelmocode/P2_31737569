@@ -1,210 +1,306 @@
- :root {
-            --primary-color: #ff4081;
-            --secondary-color: #FF80AB;
-            --dark-bg: #2D2D2D;
-            --light-bg: #F5F5F5;
-            --text-dark: #333;
-            --text-light: #FFF;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+:root {
+  --primary-color: #4CAF50;
+  --primary-dark: #388E3C;
+  --primary-light: #C8E6C9;
+  --secondary-color: #FF9800;
+  --dark-color: #212121;
+  --light-color: #ad9e9e;
+  --gray-color: #757575;
+  --white-color: #ffffff;
+  --error-color: #f44336;
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-            color: var(--text-dark);
-        }
+.contacts-container {
+  font-family: var(--font-primary);
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
 
-        .payments-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
+.contacts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--primary-light);
+}
 
-        .payments-header {
+.contacts-title {
+  font-size: 1.8rem;
+  color: var(--dark-color);
+  font-weight: 600;
+  margin: 0;
+}
+
+.contacts-count {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.count-number {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.contacts-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--white-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.contacts-table thead tr {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  text-align: left;
+}
+
+.contacts-table th {
+  padding: 1.2rem 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.contacts-table tbody tr {
+  transition: var(--transition);
+  border-bottom: 1px solid var(--primary-light);
+}
+
+.contacts-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.contacts-table tbody tr:hover {
+  background-color: var(--primary-light);
+}
+
+.contacts-table td {
+  padding: 1.2rem 1.5rem;
+  vertical-align: middle;
+  color: var(--gray-color);
+}
+
+.contact-name {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.name-avatar {
+  width: 36px;
+  height: 36px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.contact-email a {
+  color: var(--primary-dark);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.contact-email a:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+.contact-comment {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-ip {
+  font-family: var(--font-secondary);
+  font-size: 0.85rem;
+  color: var(--gray-color);
+  background-color: #f5f5f5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.contact-date {
+  font-size: 0.85rem;
+}
+
+.date-day {
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.date-time {
+  color: var(--gray-color);
+  font-size: 0.8rem;
+}
+
+.no-contacts {
+  text-align: center;
+  padding: 3rem 0;
+  background-color: var(--white-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.no-contacts-img {
+  width: 150px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+}
+
+.no-contacts-text {
+  color: var(--gray-color);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Estilos para móvil */
+@media screen and (max-width: 768px) {
+  .contacts-container {
+    padding: 0 1rem;
+  }
+  
+  .contacts-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .contacts-table {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+  
+  .contacts-table thead {
+    display: none;
+  }
+  
+  .contacts-table tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+  }
+  
+  .contacts-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--primary-light);
+  }
+  
+  .contacts-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-right: 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .contacts-table td:last-child {
+    border-bottom: none;
+  }
+  
+  .name-avatar {
+    display: none;
+  }
+  
+  .contact-comment {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+  /* Estilos específicos para pagos */
+        .payment-card {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 12px;
-            color: var(--text-light);
-            box-shadow: 0 10px 20px rgba(255, 64, 129, 0.2);
-            animation: fadeInDown 0.6s ease-out;
+            gap: 1rem;
         }
-
-        .payments-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin: 0;
+        
+        .card-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .payments-count {
-            background-color: var(--text-light);
-            color: var(--primary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-weight: 700;
+            justify-content: center;
             font-size: 1rem;
         }
-
-        .payments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .payment-card {
-            background-color: var(--text-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
-            animation: fadeIn 0.5s ease-out;
-            animation-fill-mode: both;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .payment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .payment-card-header {
+        
+        .card-details {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            flex-direction: column;
         }
-
-        .payment-card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark-bg);
-            margin: 0;
-        }
-
-        .payment-card-type {
-            font-size: 0.9rem;
-            background-color: rgba(255, 64, 129, 0.1);
-            color: var(--primary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .payment-card-body {
-            margin-bottom: 1.5rem;
-        }
-
-        .payment-detail {
-            display: flex;
-            margin-bottom: 0.8rem;
-        }
-
-        .payment-detail-label {
-            font-weight: 500;
-            color: var(--dark-bg);
-            width: 120px;
-            opacity: 0.7;
-        }
-
-        .payment-detail-value {
-            flex: 1;
-        }
-
-        .payment-card-number {
+        
+        .card-number {
             font-family: 'Courier New', monospace;
             letter-spacing: 1px;
-            color: var(--dark-bg);
-            font-weight: 600;
-        }
-
-        .payment-card-expiry {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background-color: rgba(0, 0, 0, 0.03);
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .payment-card-currency {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .payment-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 0.9rem;
-            color: var(--dark-bg);
-            opacity: 0.8;
         }
-
-        .payment-date {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        
+        .card-type {
+            margin-top: 0.2rem;
+            font-size: 0.8rem;
+            color: var(--gray-color);
         }
-
-        .no-payments {
-            text-align: center;
-            padding: 3rem;
-            background-color: var(--text-light);
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease-out;
+        
+        .card-expiry {
+            background-color: #f5f5f5;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: inline-block;
         }
-
-        .no-payments i {
-            font-size: 3rem;
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
+        
+        .payment-amount {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
         }
-
-        .no-payments p {
-            font-size: 1.2rem;
-            color: var(--dark-bg);
-            opacity: 0.7;
+        
+        .payment-currency {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
         }
-
-        /* Animaciones */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Retrasos para las tarjetas */
-        .payment-card:nth-child(1) { animation-delay: 0.1s; }
-        .payment-card:nth-child(2) { animation-delay: 0.2s; }
-        .payment-card:nth-child(3) { animation-delay: 0.3s; }
-        .payment-card:nth-child(4) { animation-delay: 0.4s; }
-        .payment-card:nth-child(5) { animation-delay: 0.5s; }
-
-        /* Responsive */
-        @media screen and (max-width: 768px) {
-            .payments-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .payments-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-        }
+        
+        .fa-cc-visa { color: #1a1f71; }
+        .fa-cc-mastercard { color: #eb001b; }
+        .fa-cc-amex { color: #016fd0; }

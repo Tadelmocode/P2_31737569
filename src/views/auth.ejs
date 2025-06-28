@@ -3,193 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/styles.css">
   <title>Autenticación</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/auth.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/alertConfig.js"></script>
-  <style>
-    .google-btn {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 15px;
-      background: white;
-      color: #444;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      text-decoration: none;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkgreen: {
+              600: '#1a5c1a',
+              700: '#134e13',
+              800: '#0d400d',
+            }
+          }
+        }
+      }
     }
-
-    .google-btn img {
-      width: 20px;
-      margin-right: 10px;
+  </script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
     }
   </style>
 </head>
-<body>
-  <%- include('partials/nav') %>
-
-  <div class="auth-container">
-    <div class="auth-switcher">
+<body class="bg-gradient-to-br from-green-100 to-green-200 min-h-screen flex items-center justify-center px-4 py-8">
+  <div class="w-full max-w-md bg-white shadow-2xl rounded-xl overflow-hidden animate-fade-in">
+    <!-- Pestañas de navegación -->
+    <div class="flex border-b">
       <button 
-      class="auth-btn <%= formType === 'login' ? 'active' : '' %>" 
-      onclick="switchForm('login')"
-      >
-      Iniciar Sesión
-    </button>
-    <button 
-    class="auth-btn <%= formType === 'register' ? 'active' : '' %>" 
-    onclick="switchForm('register')"
-    >
-    Registrarse
-  </button>
-</div>
+        onclick="switchForm('login')" 
+        class="flex-1 py-4 text-center font-medium transition duration-300 
+        <%= formType === 'login' ? 'bg-darkgreen-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">
+        <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+      </button>
+      <button 
+        onclick="switchForm('register')" 
+        class="flex-1 py-4 text-center font-medium transition duration-300 
+        <%= formType === 'register' ? 'bg-darkgreen-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">
+        <i class="fas fa-user-plus mr-2"></i> Registrarse
+      </button>
+    </div>
 
-<% if (formType === 'login') { %>
-<form id='formLogin' class="auth-form">
-  <h2>Iniciar Sesión</h2>
+    <!-- Contenido del formulario -->
+    <div class="p-6 sm:p-8">
+      <% if (formType === 'login'){ %>
+        <form id="formLogin" class="space-y-5">
+          <h2 class="text-2xl font-bold text-darkgreen-800 text-center mb-6">
+            <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+          </h2>
 
-  <div class="form-group">
-    <label for="login-email">Correo Electrónico</label>
-    <input 
-    type="email" 
-    id="login-email" 
-    name="email" 
-    required
-    placeholder="tucorreo@ejemplo.com"
-    >
+          <div class="space-y-1">
+            <label for="login-email" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-envelope mr-2 text-darkgreen-600"></i> Correo Electrónico
+            </label>
+            <input type="email" id="login-email" name="email" required placeholder="tucorreo@ejemplo.com"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="space-y-1">
+            <label for="login-password" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-lock mr-2 text-darkgreen-600"></i> Contraseña
+            </label>
+            <input type="password" id="login-password" name="password" required placeholder="••••••••"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="pt-2 space-y-4">
+            <a href="/auth/google" class="flex items-center justify-center gap-3 w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition shadow">
+              <i class="fab fa-google text-lg"></i> 
+              <span>Continuar con Google</span>
+            </a>
+            
+            <button type="submit" class="w-full bg-darkgreen-700 text-white py-3 rounded-lg hover:bg-darkgreen-800 transition shadow-lg font-medium">
+              <i class="fas fa-sign-in-alt mr-2"></i> Ingresar
+            </button>
+          </div>
+        </form>
+
+      <% } else { %>
+        <form id="formRegister" class="space-y-5">
+          <h2 class="text-2xl font-bold text-darkgreen-800 text-center mb-6">
+            <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
+          </h2>
+
+          <div class="space-y-1">
+            <label for="username" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-user mr-2 text-darkgreen-600"></i> Nombre Completo
+            </label>
+            <input type="text" id="username" name="username" required placeholder="Juan Pérez"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="space-y-1">
+            <label for="register-email" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-envelope mr-2 text-darkgreen-600"></i> Correo Electrónico
+            </label>
+            <input type="email" id="register-email" name="email" required placeholder="tucorreo@ejemplo.com"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="space-y-1">
+            <label for="register-password" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-lock mr-2 text-darkgreen-600"></i> Contraseña
+            </label>
+            <input type="password" id="register-password" name="password_hash" required placeholder="••••••••" minlength="6"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="space-y-1">
+            <label for="register-confirm" class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-lock mr-2 text-darkgreen-600"></i> Confirmar Contraseña
+            </label>
+            <input type="password" id="register-confirm" name="passwordHash" required placeholder="••••••••"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-darkgreen-500 focus:border-darkgreen-500 transition">
+          </div>
+
+          <div class="pt-2">
+            <button type="submit" class="w-full bg-darkgreen-700 text-white py-3 rounded-lg hover:bg-darkgreen-800 transition shadow-lg font-medium">
+              <i class="fas fa-user-plus mr-2"></i> Registrarse
+            </button>
+          </div>
+        </form>
+      <% } %>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for="login-password">Contraseña</label>
-    <input 
-    type="password" 
-    id="login-password" 
-    name="password_hash" 
-    required
-    placeholder="••••••••"
-    >
-  </div>
+  <script>
+    function switchForm(type) {
+      window.location.href = `/login?form=${type}`;
+    }
+  </script>
 
-  <a href="/auth/google" class="bg-red-500 text-white px-4 py-2 rounded">
-  Iniciar sesión con Google
-</a>
-
-
-
-  <button type="submit" class="submit-btn">Ingresar</button>
-</form>
-<% } else { %>
-<form id='formRegister' class="auth-form">
-  <h2>Crear Cuenta</h2>
-
-  <div class="form-group">
-    <label for="register-name">Nombre Completo</label>
-    <input 
-    type="text" 
-    id="username" 
-    name="username" 
-    required
-    placeholder="Juan Pérez"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="register-email">Correo Electrónico</label>
-    <input 
-    type="email" 
-    id="register-email" 
-    name="email" 
-    required
-    placeholder="tucorreo@ejemplo.com"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="register-password">Contraseña</label>
-    <input 
-    type="password" 
-    id="register-password" 
-    name="password_hash" 
-    required
-    placeholder="••••••••"
-    minlength="6"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="register-confirm">Confirmar Contraseña</label>
-    <input 
-    type="password" 
-    id="register-confirm" 
-    name="passwordHash" 
-    required
-    placeholder="••••••••"
-    >
-  </div>
-
-  <button type="submit" class="submit-btn">Registrarse</button>
-</form>
-<% } %>
-</div>
-
-<%- include('partials/footer') %>
-
-<script>
-  function switchForm(type) {
-    window.location.href = `/login?form=${type}`;
-  }
-</script>
-<script>
-  const formRegister = document.querySelector('#formRegister');
-  if (formRegister) {
-    formRegister.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-
-      fetch('/registerUser', {
-        method: 'POST',
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(res => {
-        Swal.fire(res.message);
-      });
-    });
-  }
-</script>
-
-<script>
-  const formLogin = document.querySelector('#formLogin');
-  if (formLogin) {
-    formLogin.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-
-      fetch('/loginPost', {
-        method: 'POST',
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status) {
-          Swal.fire(res.message).then(() => {
-            window.location.href = '/admin/contacts';
+  <script>
+    let data, formData;
+    const formRegister = document.querySelector('#formRegister');
+    if (formRegister) {
+      formRegister.addEventListener('submit', e => {
+        e.preventDefault();
+        formData = new FormData(e.target);
+        data = Object.fromEntries(formData.entries());
+        fetch('/registerUser', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(res => {
+          Swal.fire({
+            title: res.message,
+            icon: res.status ? 'success' : 'error',
+            confirmButtonColor: '#1a5c1a'
           });
-        } else {
-          Swal.fire(res.message);
-        }
+        });
       });
-    });
-  }
-</script>
+    }
+  </script>
+
+  <script>
+    const formLogin = document.querySelector('#formLogin');
+    if (formLogin) {
+      formLogin.addEventListener('submit', e => {
+        e.preventDefault();
+        formData = new FormData(e.target);
+        data = Object.fromEntries(formData.entries());
+        fetch('/loginPost', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(res => {
+          if (res.status){
+            Swal.fire({
+              title: res.message,
+              icon: 'success',
+              confirmButtonColor: '#1a5c1a'
+            }).then(() => {
+              window.location.href = '/admin/contacts';
+            });
+          } else {
+            Swal.fire({
+              title: res.message,
+              icon: 'error',
+              confirmButtonColor: '#1a5c1a'
+            });
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>

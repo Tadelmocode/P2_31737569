@@ -24,7 +24,7 @@ formulario.addEventListener('submit',e=>{
     			window.location.href='/admin/contacts';
     		})
     	}else{
-    		Swal.fire('¡Los Datos no se pudieron crear correctamente!');
+    		Swal.fire('¡Los Datos no se pudieron crear correctamente por alguna extraña razon hijo JAJAJAJAJ!');
     	}
     })
 
